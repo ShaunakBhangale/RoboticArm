@@ -1,7 +1,3 @@
-# build/
-# *.o
-# *.elf
-# *.bin
-# .pio/          # if using PlatformIO
-# .vscode/
-# .DS_Store
+.pio/
+.vscode/
+.DS_Store
