@@ -28,9 +28,9 @@ public:
         this->stepangle = 1.8;
         this->acceleration = acceleration;
         this->max_speed = max_speed;
-
-        stepper.setMaxSpeed(max_speed);
+        
         stepper.setAcceleration(acceleration);
+        stepper.setMaxSpeed(max_speed);
     }
     void moveToAngle(int angle);
     int getRatio();
