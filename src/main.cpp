@@ -2,11 +2,11 @@
 #include "joint.h"
 // ratio, microstep, max_speed, acceleration, bound, dir_pin, step_pin
 // For all, max speed, acceleration, bound, and microstep need to be like tested
-StepperJoint J1(25, 16, 1000, 150, 45, 22, 32);
+StepperJoint J1(25, 16, 2000, 100, 45, 22, 32);
 StepperJoint J2(25, 16, 500, 150, 45, 25, 26);
-StepperJoint J3(25, 16, 1000, 250, 45, 23, 33);
-StepperJoint J4(15, 16, 1000, 500, 45, 13, 4);
-StepperJoint J5(15, 16, 1000, 500, 45, 17, 16);
+StepperJoint J3(25, 16, 500, 150, 45, 23, 33);
+StepperJoint J4(15, 16, 2000, 500, 45, 13, 4);
+StepperJoint J5(15, 16, 2000, 500, 45, 17, 16);
 
 // bound,pulse
 ServoJoint J6(45, 27);
@@ -19,18 +19,17 @@ bool atHome = true;
 
 void runMove() {
     if (atHome) {
-        // J1.moveToAngle(45);
-        // J2.moveToAngle(45);
-        // J3.moveToAngle(-60);
+        J1.moveToAngle(15);
+        // J2.moveToAngle(20);
         // J3.moveToAngle(30);
         // J4.moveToAngle(-20);
-        // J5.moveToAngle(90);
+        // J5.moveToAngle(180);
     } else {
-        // J1.moveToAngle(0);
-        // J2.moveToAngle(0);
-        // J3.moveToAngle(0);
-        // J4.moveToAngle(0);
-        // J5.moveToAngle(0);
+        J1.moveToAngle(0);
+        J2.moveToAngle(0);
+        J3.moveToAngle(0);
+        J4.moveToAngle(0);
+        J5.moveToAngle(0);
     }
     atHome = !atHome;
 }
