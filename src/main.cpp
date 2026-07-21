@@ -1,41 +1,33 @@
 #include <Arduino.h>
 #include "joint.h"
+#include <sstream>
+#include <vector>
 // ratio, microstep, max_speed, acceleration, bound, dir_pin, step_pin
 // For all, max speed, acceleration, bound, and microstep need to be like tested
-StepperJoint J1(25, 16, 2000, 100, 45, 22, 32);
-StepperJoint J2(25, 16, 500, 150, 45, 25, 26);
-StepperJoint J3(25, 16, 500, 150, 45, 23, 33);
-StepperJoint J4(15, 16, 2000, 500, 45, 13, 4);
-StepperJoint J5(15, 16, 2000, 500, 45, 17, 16);
+StepperJoint J1(25, 16, 2000, 100, 60, 22, 32);
+StepperJoint J2(25, 16, 500, 150, 60, 25, 26);
+StepperJoint J3(25, 16, 500, 150, 120, 23, 33);
+StepperJoint J4(15, 16, 2000, 500, 90, 13, 4);
+StepperJoint J5(15, 16, 2000, 500, 120, 17, 16);
 
 // bound,pulse
-ServoJoint J6(45, 27);
+ServoJoint J6(180, 27);
 ServoJoint gripper(45, 21);
 
 // Positive Directions (J1, J2, J3, J4, J5)
 // CW, CW, CW, CCW, CW
 
-bool atHome = true;   
-
-void runMove() {
-    if (atHome) {
-        J1.moveToAngle(15);
-        // J2.moveToAngle(20);
-        // J3.moveToAngle(30);
-        // J4.moveToAngle(-20);
-        // J5.moveToAngle(180);
-    } else {
-        J1.moveToAngle(0);
-        J2.moveToAngle(0);
-        J3.moveToAngle(0);
-        J4.moveToAngle(0);
-        J5.moveToAngle(0);
-    }
-    atHome = !atHome;
+void runMove(std::vector<float> joint_angles) {
+        J1.moveToAngle(joint_angles[0]);
+        J2.moveToAngle(joint_angles[1]);
+        J3.moveToAngle(joint_angles[2]);
+        J4.moveToAngle(-joint_angles[3]);
+        J5.moveToAngle(joint_angles[4]);
+        J6.moveToAngle(joint_angles[5]);
 }
 
 void setup() {
-    Serial.begin(115200);
+    Serial.begin(9600);
 
     pinMode(18, OUTPUT);   // J4 MS1
     // J4 MS2 is already on 3.3V
@@ -45,16 +37,21 @@ void setup() {
     digitalWrite(19, HIGH);
     digitalWrite(14, HIGH);
 
-    Serial.println("Ready. Press SPACE in the Serial Monitor to run the move.");
 }
 
 void loop() {
-    if (Serial.available() > 0) {
-        char c = Serial.read();
-        if (c == ' ') {
-            runMove();
-            Serial.println(atHome ? "Moving to 0" : "Moving out");
+    if (Serial.available()) {
+        String line = Serial.readStringUntil('\n');
+        std::stringstream ss(line.c_str());        
+        std::string token;
+
+        std::vector<float> joint_angles;     
+        while(std::getline(ss, token, ' ')) {
+            float angle = std::stof(token);
+            joint_angles.push_back(angle);
         }
+    if (joint_angles.size() == 6) 
+        runMove(joint_angles);
     }
     J1.update();
     J2.update();

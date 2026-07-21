@@ -1,6 +1,14 @@
 #include "joint.h"
 
-void StepperJoint::moveToAngle(int angle) {
+void StepperJoint::moveToAngle(float angle) {
+    if (bound < angle) {
+        angle = bound;
+    }
+
+    if (angle < -bound) {
+        angle = -bound;
+    }
+    
     double base_steps = angle / stepangle;
     double micro_steps = base_steps * microstep;
     long total_steps = micro_steps * ratio;
@@ -36,6 +44,10 @@ void StepperJoint::update() {
 
 
 void ServoJoint::moveToAngle(int angle) {
+    if (bound < angle) {
+        angle = bound;
+    }
+
     servo.write(angle);
 }
 int ServoJoint::getPulsePin() {

@@ -32,7 +32,7 @@ public:
         stepper.setAcceleration(acceleration);
         stepper.setMaxSpeed(max_speed);
     }
-    void moveToAngle(int angle);
+    void moveToAngle(float angle);
     int getRatio();
     int getMicrostep();
     int getBound();
