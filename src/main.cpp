@@ -10,9 +10,9 @@ StepperJoint J3(25, 16, 500, 150, 120, 23, 33);
 StepperJoint J4(15, 16, 2000, 500, 90, 13, 4);
 StepperJoint J5(15, 16, 2000, 500, 120, 17, 16);
 
-// bound,pulse
-ServoJoint J6(180, 27);
-ServoJoint gripper(45, 21);
+// bound,pulse (the actual J6 is 21)
+ServoJoint J6(180, 21);
+ServoJoint gripper(180, 27);
 
 // Positive Directions (J1, J2, J3, J4, J5)
 // CW, CW, CW, CCW, CW
@@ -27,6 +27,11 @@ void runMove(std::vector<float> joint_angles) {
 }
 
 void setup() {
+    ESP32PWM::allocateTimer(0);
+    ESP32PWM::allocateTimer(1);
+    ESP32PWM::allocateTimer(2);
+    ESP32PWM::allocateTimer(3);
+
     Serial.begin(9600);
 
     pinMode(18, OUTPUT);   // J4 MS1

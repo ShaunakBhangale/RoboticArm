@@ -41,12 +41,10 @@ int StepperJoint::getMaxSpeed() {
 void StepperJoint::update() {
     stepper.run();
 }
-
-
 void ServoJoint::moveToAngle(int angle) {
     if (bound < angle) {
         angle = bound;
-    }
+    } 
 
     servo.write(angle);
 }
